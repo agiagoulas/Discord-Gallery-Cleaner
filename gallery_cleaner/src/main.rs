@@ -19,7 +19,7 @@ async fn main() {
     tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
 
     // load config, comment in for non-docker run
-    //dotenv::from_filename("./.env").expect("Failed to load .env file"); 
+    dotenv::from_filename("./.env").expect("Failed to load .env file"); 
     
     let token = env::var("DISCORD_TOKEN").expect("Expected token in env.");
     let admin_channel = str_to_channel_id(
@@ -45,7 +45,7 @@ async fn main() {
         let (purge_count, count_media_kept) = purge_channel(&channel, ctx).await;
 
         let delete_count_msg = format!(
-            "Purge #{}: Deleted {} messages, kept {} images.",
+            "Ich habe in #{} {} Nachrichten gelöscht und {} Bilder behalten.",
             channel_name, purge_count, count_media_kept
         );
 
@@ -105,7 +105,7 @@ fn linked_image(msg: &Message) -> bool {
 
 fn message_older_then_one_day(msg: &Message) -> bool {
     let now = Utc::now();
-    now.signed_duration_since(msg.timestamp).num_seconds() > 86400 // one day in seconds
+    now.signed_duration_since(msg.timestamp).num_seconds() > 2419200 // one month in seconds
 }
 
 fn str_to_channel_id(id_as_str: &str) -> ChannelId {
