@@ -19,7 +19,7 @@ async fn main() {
     tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
 
     // load config, comment in for non-docker run
-    dotenv::from_filename("./.env").expect("Failed to load .env file"); 
+    // dotenv::from_filename("./.env").expect("Failed to load .env file"); 
     
     let token = env::var("DISCORD_TOKEN").expect("Expected token in env.");
     let admin_channel = str_to_channel_id(
@@ -91,7 +91,6 @@ fn linked_image(msg: &Message) -> bool {
         "instagram.com",
         "imgur.com",
         "cdn.discordapp.com",
-        "media.jipvankuijk.nl",
     ];
 
     for url in allowed_urls {
