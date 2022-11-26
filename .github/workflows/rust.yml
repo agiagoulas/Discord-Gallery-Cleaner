@@ -11,7 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+    - name: Run Bot
+      env:
+        DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+        RUST_LOG: ${{ secrets.RUST_LOG }}
+        ADMIN_CHANNEL_ID: ${{ secrets.ADMIN_CHANNEL_ID }}
+        PURGE_CHANNEL_ID1: ${{ secrets.PURGE_CHANNEL_ID1 }}
+        PURGE_CHANNEL_ID2: ${{ secrets.PURGE_CHANNEL_ID2 }}
+      run: cargo run --verbose
+    
