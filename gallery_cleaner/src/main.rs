@@ -94,6 +94,7 @@ fn linked_image(msg: &Message) -> bool {
         "instagram.com",
         "imgur.com",
         "cdn.discordapp.com",
+        "lfi-online.de",
     ];
 
     for url in allowed_urls {
