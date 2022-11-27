@@ -1,11 +1,10 @@
-use chrono::Utc;
 use serenity::{
     futures::StreamExt,
     http::Http,
     model::{channel::Message, id::ChannelId},
     prelude::*,
 };
-use std::env;
+use std::{env, time::SystemTime};
 use tracing::{error, info, Level};
 use tracing_subscriber::FmtSubscriber;
 
@@ -29,7 +28,11 @@ async fn main() {
 
     // connect to api and clean
     info!("Starting clean job.");
-    let client = Client::builder(&token).await.expect("Err creating client");
+    let intents = GatewayIntents::all();
+
+    let client = Client::builder(token, intents)
+        .await
+        .expect("Err creating client");
     let ctx = &client.cache_and_http.http;
 
     for (_, channelid) in channels_to_clean {
@@ -63,7 +66,7 @@ async fn purge_channel(channel: &ChannelId, ctx: &Http) -> (u64, u64) {
     while let Some(message_result) = messages.next().await {
         match message_result {
             Ok(message) => {
-                if message.attachments.len() > 0 || linked_image(&message) {
+                if !message.attachments.is_empty() || linked_image(&message) {
                     count_media_kept += 1;
                 } else if message_older_then_one_day(&message) {
                     match message.delete(&ctx).await {
@@ -103,8 +106,13 @@ fn linked_image(msg: &Message) -> bool {
 }
 
 fn message_older_then_one_day(msg: &Message) -> bool {
-    let now = Utc::now();
-    now.signed_duration_since(msg.timestamp).num_seconds() > 2419200 // one month in seconds
+    let msg_unix = msg.timestamp.unix_timestamp() as u64;
+    let current_unix = SystemTime::now()
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
+
+    (current_unix - msg_unix) > 2419200 // one month in seconds
 }
 
 fn str_to_channel_id(id_as_str: &str) -> ChannelId {
