@@ -12,9 +12,14 @@ jobs:
     - name: Run Bot
       env:
         DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-        RUST_LOG: ${{ secrets.RUST_LOG }}
+        RUST_LOG: info
         ADMIN_CHANNEL_ID: ${{ secrets.ADMIN_CHANNEL_ID }}
         PURGE_CHANNEL_ID1: ${{ secrets.PURGE_CHANNEL_ID1 }}
         PURGE_CHANNEL_ID2: ${{ secrets.PURGE_CHANNEL_ID2 }}
+        CLEAN_TIME_SECONDS_THRESHOLD: 2419200
+        ALLOWED_URI_1: instagram.com
+        ALLOWED_URI_2: imgur.com
+        ALLOWED_URI_3: cdn.discordapp.com
+        ALLOWED_URI_4: lfi-online.de
       run: cargo run --verbose
     
